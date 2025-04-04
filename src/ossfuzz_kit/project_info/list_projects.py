@@ -1,23 +1,20 @@
-from os import path
-import requests
 from functools import lru_cache
 from requests.exceptions import RequestException
 
-from ossfuzz_kit.utils import shallow_clone_repo
+from ossfuzz_kit.utils import fetch_from_url, shallow_clone_repo
 from ossfuzz_kit.config import OSS_FUZZ_REPO_URL, CLONE_DEPTH, GIT_TREE_API_URL, DEFAULT_HEADERS
 
 @lru_cache(maxsize=1)
 def list_all_projects() -> list[str]:
     """
-    Lists all OSS Fuzz projects by parsing the GitHub Tree API:
-    - Falls back to shallow cloning if the API fails.
-    - Uses LRU caching for performance.
+    Returns a sorted list of all OSS-Fuzz project names.
+
+    Tries the GitHub Tree API first; falls back to a shallow clone
+    if the API request fails. Uses LRU caching for efficiency.
     """
     try:
-        response = requests.get(GIT_TREE_API_URL, headers=DEFAULT_HEADERS, timeout=15)
-        response.raise_for_status()
-
-        tree = response.json().get("tree", [])
+        response = fetch_from_url(url=GIT_TREE_API_URL, format="json")
+        tree = response.get("tree", [])
 
         project_names = {
             entry["path"].split("/")[1]

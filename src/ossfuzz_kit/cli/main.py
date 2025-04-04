@@ -4,7 +4,7 @@ import logging
 
 from importlib.metadata import version, PackageNotFoundError
 
-from ossfuzz_kit.cli.commands.list_projects import handle_list_projects
+from src.ossfuzz_kit.cli.commands.project_info import handle_list_projects, handle_project_details
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("ossfuzz-kit")
@@ -27,6 +27,12 @@ def get_parser():
     list_cmd = subparsers.add_parser("list-projects", help="List all OSS-Fuzz projects")
     list_cmd.add_argument("--limit", type=int, default=None, help="Limit number of projects (default: all)")
     list_cmd.set_defaults(func=handle_list_projects)
+
+    # --- project-details ---
+    details_cmd = subparsers.add_parser("project-details", help="Get detailed info for a project")
+    details_cmd.add_argument("project", help="Name of the OSS-Fuzz project")
+    details_cmd.add_argument("--raw", action="store_true", help="Return full raw metadata from project.yaml")
+    details_cmd.set_defaults(func=handle_project_details)
 
     return parser
 
