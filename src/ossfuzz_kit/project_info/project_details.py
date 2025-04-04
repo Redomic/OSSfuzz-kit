@@ -47,5 +47,6 @@ def get_project_info(project_name: str, raw: bool = False) -> dict[str, Any]:
             "architectures": data.get("architectures") or [],
             "homepage": data.get("homepage"),
             "repo": data.get("main_repo"),
+            "primary_contact": data.get("primary_contact"),
             "vendor_ccs": data.get("vendor_ccs"),
         }
