@@ -4,7 +4,7 @@ import logging
 
 from importlib.metadata import version, PackageNotFoundError
 
-from src.ossfuzz_kit.cli.commands.project_info import handle_list_projects, handle_project_details
+from ossfuzz_kit.cli.commands.project_info import handle_list_projects, handle_project_details
 
 logger = logging.getLogger("ossfuzz-kit")
 
