@@ -1,6 +1,6 @@
 [project]
 name = "ossfuzz-kit"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = [
     {name = "Jones David",email = "redomicmc@gmail.com"}
