@@ -20,6 +20,11 @@ def get_parser():
         description="OSSFuzz-Kit CLI — Interact with OSS-Fuzz"
     )
     parser.add_argument('--version', action='version', version=f'ossfuzz-kit {get_package_version()}')
+    parser.add_argument(
+        "--no-fallback",
+        action="store_true",
+        help="Disable the Github API as fallback"
+    )
 
     subparsers = parser.add_subparsers(dest="command", title="Commands", required=True)
 

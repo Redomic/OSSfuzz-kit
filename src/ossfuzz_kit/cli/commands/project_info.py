@@ -28,7 +28,7 @@ def handle_list_projects(args):
     """Handles 'list-projects' CLI commands"""
 
     print(f"{CYAN}Fetching OSS-Fuzz projects...{RESET}")
-    projects = client.get_all_projects()
+    projects = client.get_all_projects(use_fallback=not args.no_fallback)
     limit = args.limit if args.limit is not None else len(projects)
         
     for project in projects[:limit]:

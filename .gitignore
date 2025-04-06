@@ -45,3 +45,5 @@ site/
 *.swp
 *.swo
 *~
+
+data/oss-fuzz

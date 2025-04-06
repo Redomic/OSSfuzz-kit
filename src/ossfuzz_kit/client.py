@@ -6,11 +6,11 @@ class OSSFuzzClient:
         # TODO: Expand for caching, config overrides, etc
         pass
 
-    def get_all_projects(self) -> list[str]:
+    def get_all_projects(self, use_fallback: bool = True) -> list[str]:
         """
         Returns a list of all OSS-Fuzz projects.
         """
-        return list_all_projects()
+        return list_all_projects(use_fallback=use_fallback)
     
     def get_project_details(self, project_name: str, raw: bool = False) -> dict:
         """
