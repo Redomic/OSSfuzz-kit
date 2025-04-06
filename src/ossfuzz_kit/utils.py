@@ -3,6 +3,7 @@ import time
 import sys
 import requests
 import logging
+from urllib.parse import urlparse
 from tqdm import tqdm
 from pathlib import Path
 from typing import Optional
@@ -118,8 +119,9 @@ class RepoManager:
                 text=True
             ).strip()
 
-            owner_repo = self.repo_url.rstrip(".git").split("github.com/")[1]
-            api_url = f"https://api.github.com/repos/{owner_repo}/branches/main"
+            parsed = urlparse(self.repo_url)
+            owner_repo = parsed.path.lstrip("/").removesuffix(".git")
+            api_url = f"https://api.github.com/repos/{owner_repo}/branches/master"
 
             remote_data = fetch_from_url(api_url, headers=self.headers, max_retries=1, format="json")
             remote_commit = remote_data["commit"]["sha"]
