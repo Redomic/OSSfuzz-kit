@@ -1,8 +1,11 @@
 from functools import lru_cache
+import logging
 from requests.exceptions import RequestException
 
-from ossfuzz_kit.utils import fetch_from_url, shallow_clone_repo
-from ossfuzz_kit.config import OSS_FUZZ_REPO_URL, CLONE_DEPTH, GIT_TREE_API_URL, DEFAULT_HEADERS
+from ossfuzz_kit.utils import fetch_from_url, get_repo_manager
+from ossfuzz_kit.config import GIT_TREE_API_URL
+
+logger = logging.getLogger("ossfuzz_kit")
 
 @lru_cache(maxsize=1)
 def list_all_projects(use_fallback: bool = True) -> list[str]:
@@ -15,17 +18,20 @@ def list_all_projects(use_fallback: bool = True) -> list[str]:
     """
 
     try:
-        repo_path = shallow_clone_repo(OSS_FUZZ_REPO_URL, CLONE_DEPTH)
+        manager = get_repo_manager()
+        repo_path = manager.get_projects_dir()
+
         if not repo_path.exists():
-            raise FileNotFoundError("Could not find `projects/` directory in the shallow clone.")
+            raise FileNotFoundError("Could not find `projects/` directory in the local clone.")
 
         project_names = [p.name for p in repo_path.iterdir() if p.is_dir()]
         return sorted(project_names)
 
     except Exception as e:
-        print(f"[Warning] Local clone failed: {e}")
+        logger.warning(f"Local clone failed when listing projects: {e}")
 
         if use_fallback:
+            logger.debug("Falling back to GitHub Tree API for project list...")
             try:
                 response = fetch_from_url(url=GIT_TREE_API_URL, format="json")
                 tree = response.get("tree", [])

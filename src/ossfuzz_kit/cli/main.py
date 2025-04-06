@@ -6,7 +6,6 @@ from importlib.metadata import version, PackageNotFoundError
 
 from src.ossfuzz_kit.cli.commands.project_info import handle_list_projects, handle_project_details
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("ossfuzz-kit")
 
 def get_package_version(pkg_name: str = "ossfuzz-kit") -> str:
@@ -20,6 +19,11 @@ def get_parser():
         description="OSSFuzz-Kit CLI — Interact with OSS-Fuzz"
     )
     parser.add_argument('--version', action='version', version=f'ossfuzz-kit {get_package_version()}')
+    parser.add_argument(
+        "--verbose",
+        action="store_true",
+        help="Enable verbose output (INFO level logs)"
+    )
     parser.add_argument(
         "--no-fallback",
         action="store_true",
@@ -41,14 +45,22 @@ def get_parser():
 
     return parser
 
+
 def main():
     parser = get_parser()
     args = parser.parse_args()
 
+    logging_level = logging.INFO if args.verbose else logging.ERROR
+    logging.basicConfig(
+        level=logging_level,
+        format="%(message)s",
+        handlers=[logging.StreamHandler()]
+    )
+
     try:
         args.func(args)
     except Exception as e:
-        logger.error(f"Command failed: {e}", exc_info=True)
+        logger.error(f"Command failed: {e}", exc_info=args.verbose)
         sys.exit(1)
 
 if __name__ == "__main__":

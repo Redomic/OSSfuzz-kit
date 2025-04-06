@@ -1,10 +1,14 @@
 import json
 import functools
 import sys
+import logging
 from ossfuzz_kit.client import OSSFuzzClient
 
 client = OSSFuzzClient()
 
+logger = logging.getLogger("ossfuzz_kit")
+
+# ANSI color codes
 GREEN = "\033[92m"
 YELLOW = "\033[93m"
 RED = "\033[91m"
@@ -19,7 +23,7 @@ def cli_handler(func):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            print(f"{RED}Command failed:{RESET} {e}")
+            logger.error(f"{RED}Command failed:{RESET} {e}")
             sys.exit(1)
     return wrapper
 
