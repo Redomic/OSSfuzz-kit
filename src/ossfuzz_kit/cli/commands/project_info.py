@@ -45,6 +45,6 @@ def handle_project_details(args):
     """Handles 'project-details' CLI commands"""
 
     print(f"{CYAN}Fetching details for project: {args.project}{RESET}")
-    details = client.get_project_details(args.project, raw=args.raw)
+    details = client.get_project_details(args.project, raw=args.raw, use_fallback=not args.no_fallback)
     formatted = json.dumps(details, indent=2, sort_keys=False)
     print(formatted)

@@ -12,8 +12,8 @@ class OSSFuzzClient:
         """
         return list_all_projects(use_fallback=use_fallback)
     
-    def get_project_details(self, project_name: str, raw: bool = False) -> dict:
+    def get_project_details(self, project_name: str, raw: bool = False, use_fallback: bool = True) -> dict:
         """
         Fetch metadata for a specific OSS-Fuzz project.
         """
-        return get_project_info(project_name=project_name, raw=raw)
+        return get_project_info(project_name=project_name, raw=raw, use_fallback=use_fallback)

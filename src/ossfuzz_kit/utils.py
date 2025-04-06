@@ -86,7 +86,7 @@ def shallow_clone_repo(repo_url: str, depth: int = 1, sparse_dir: str = "project
         return clone_path / sparse_dir
 
     except subprocess.CalledProcessError as e:
-        logger.error(f"Git clone failed: {e}")
+        logger.error(f"Git clone failed... Check your connection")
         raise RuntimeError(f"Git clone failed: {e}")
 
 class RepoManager:

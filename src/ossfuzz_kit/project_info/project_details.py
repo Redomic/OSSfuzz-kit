@@ -7,7 +7,7 @@ from ossfuzz_kit.utils import fetch_from_url, get_repo_manager
 
 logger = logging.getLogger("ossfuzz_kit")
 
-def get_project_info(project_name: str, raw: bool = False) -> dict[str, Any]:
+def get_project_info(project_name: str, raw: bool = False, use_fallback: bool = True) -> dict[str, Any]:
     """
     Retrieves project metadata from OSS-Fuzz Project's `project.yaml`
 
@@ -32,7 +32,7 @@ def get_project_info(project_name: str, raw: bool = False) -> dict[str, Any]:
     except Exception as e:
         logger.warning(f"Failed to load project.yaml from local clone for '{project_name}': {e}")
         url = f"https://raw.githubusercontent.com/google/oss-fuzz/master/projects/{project_name}/project.yaml"
-        logger.debug(f"Falling back to fetching project.yaml from remote: {url}")
+        logger.warning(f"Falling back to fetching project.yaml from remote: {url}")
 
         try:
             response = fetch_from_url(url, format="text")
