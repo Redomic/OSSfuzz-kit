@@ -15,6 +15,7 @@ dependencies = [
 
 [tool.poetry]
 packages = [{include = "ossfuzz_kit", from = "src"}]
+readme = "README.md"
 
 [tool.poetry.scripts]
 ossfuzz-kit = "ossfuzz_kit.cli.main:main"
